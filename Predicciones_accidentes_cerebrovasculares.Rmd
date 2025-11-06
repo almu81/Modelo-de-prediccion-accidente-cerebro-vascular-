@@ -1,0 +1,144 @@
+---
+title: "Predicciones_coursera"
+author: "ALC"
+date: "2025-11-06"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+#### Código para cargar las librerías.
+
+```{r setup, echo=TRUE, eval=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("tidyverse")
+install.packages("caret")
+install.packages("pROC")
+install.packages("randomForest")
+install.packages("corrplot")
+
+library(tidyverse)
+library(caret)
+library(pROC)
+library(randomForest)
+library(corrplot)
+install.packages("ROSE")
+library(ROSE)
+```
+
+### Introducción
+
+En este proyecto se desarrolla un modelo de **regresión logística** para predecir la probabilidad de sufrir un ictus, utilizando un dataset público de salud.  
+El objetivo es identificar las variables más influyentes y evaluar la capacidad predictiva del modelo.
+
+#### Carga y exploración de datos.
+
+```{r}
+data <- read.csv("/cloud/project/healthcare-dataset-stroke-data.csv")
+
+str(data)
+summary(data)
+```
+
+#### Limpieza de datos.  
+
+Comprobación y tratamiento de valores faltantes.
+
+```{r}
+data$bmi[data$bmi == "N/A"] <- NA
+data$bmi <- as.numeric(data$bmi)
+data$bmi[data$bmi == "N/A"] <- NA
+data$bmi <- as.numeric(data$bmi)
+mediana_bmi <- median(data$bmi, na.rm = TRUE)
+data$bmi[is.na(data$bmi)] <- mediana_bmi
+```
+
+#### Preparación de datos.  
+
+Conversión de variables a factores.
+
+```{r}
+data$id <- NULL
+data$stroke <- as.factor(data$stroke)
+data$gender <- as.factor(data$gender)
+data$ever_married <- as.factor(data$ever_married)
+data$work_type <- as.factor(data$work_type)
+data$Residence_type <- as.factor(data$Residence_type)
+data$smoking_status <- as.factor(data$smoking_status)
+
+```
+
+#### División del dataset.   
+
+Uso de caret::createDataPartition.
+
+```{r}
+set.seed(123)
+trainIndex <- createDataPartition(data$stroke, p = 0.7, list = FALSE)
+train_data <- data[trainIndex, ]
+test_data  <- data[-trainIndex, ]
+
+prop.table(table(train_data$stroke))
+prop.table(table(test_data$stroke))
+
+```
+
+#### Balanceo de clases.    
+
+Aplicación de sobremuestreo o submuestreo
+
+```{r}
+
+set.seed(123)
+train_balanced <- upSample(x = train_data[, -which(names(train_data) == "stroke")],
+                           y = train_data$stroke,
+                           yname = "stroke")
+
+```
+
+#### Entrenamiento del modelo.     
+
+Aplicación de sobremuestreo o submuestreo
+
+```{r}
+modelo_log <- glm(stroke ~ ., family = binomial, data = train_balanced)
+summary(modelo_log)
+
+```
+
+#### Evaluación del modelo.   
+
+Ajuste de la regresión logística.
+Interpretación de los coeficientes.
+
+```{r}
+
+predicciones <- predict(modelo_log, newdata = test_data, type = "response")
+pred_clase <- ifelse(predicciones > 0.5, 1, 0)
+pred_clase <- factor(pred_clase, levels = c(0,1))
+
+
+conf_matrix <- confusionMatrix(pred_clase, test_data$stroke, positive = "1")
+conf_matrix
+
+```
+
+#### Curva ROC Y AUC.  
+
+Curva ROC y valor AUC
+
+```{r}
+roc_obj <- roc(as.numeric(test_data$stroke), as.numeric(predicciones))
+plot(roc_obj, col = "blue", main = "Curva ROC")
+auc_valor <- auc(roc_obj)
+cat("AUC:", auc_valor)
+
+```
+
+#### Conclusión.   
+
+El modelo presenta una AUC de 0.86, lo que indica buena capacidad predictiva.
+Las variables más influyentes fueron edad, hipertensión y nivel de glucosa promedio
+Sin embargo, la precisión global es moderada, reflejando la dificultad de predecir casos positivos debido al desequilibrio natural del dataset.
+En futuros pasos se podrían explorar modelos más avanzados (Random Forest, XGBoost) y optimización de hiperparámetros.
+
