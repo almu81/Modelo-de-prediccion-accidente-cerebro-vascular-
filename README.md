@@ -52,4 +52,4 @@ El proyecto incluye la preparación de datos, balanceo de clases, entrenamiento 
 ## Cómo ejecutar
 1. Clonar el repositorio:  
    ```bash
-   git clone https://github.com/almu81/Modelo-de-prediccion-accidente-cerebro-vascular.git
+   git clone https://github.com/almu81/Modelo-de-prediccion-accidente-cerebro-vascular-.git
