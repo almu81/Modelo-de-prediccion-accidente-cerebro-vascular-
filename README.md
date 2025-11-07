@@ -1,6 +1,6 @@
 ### Modelo-de-prediccion-accidente-cerebro-vascular-
 
-# Predicción de Ictus (Stroke) - Proyecto Coursera ALC 2025-11-06
+# Predicción de Ictus (Stroke) - ALC 2025-11-06
 
 ## Descripción
 Este proyecto desarrolla un modelo de regresión logística para predecir la probabilidad de sufrir un ictus, utilizando un dataset público de salud.
