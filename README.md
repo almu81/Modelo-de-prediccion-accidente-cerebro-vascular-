@@ -3,9 +3,11 @@
 # Predicción de Ictus (Stroke) - Proyecto Coursera ALC 2025-11-06
 
 ## Descripción
-Este proyecto desarrolla un modelo de **regresión logística** para predecir la probabilidad de sufrir un ictus, utilizando un dataset público de salud. El objetivo es identificar las variables más influyentes y evaluar la capacidad predictiva del modelo.
+Este proyecto desarrolla un modelo de regresión logística para predecir la probabilidad de sufrir un ictus, utilizando un dataset público de salud.
+El objetivo es identificar las variables más influyentes y evaluar la capacidad predictiva del modelo.
 
 El proyecto incluye la preparación de datos, balanceo de clases, entrenamiento del modelo, evaluación y visualización de la curva ROC.
+Además, se incluye un informe técnico en formato R Markdown, que documenta todo el proceso analítico y permite reproducir el análisis completo paso a paso.
 
 ---
 
@@ -17,7 +19,7 @@ El proyecto incluye la preparación de datos, balanceo de clases, entrenamiento 
 - `Predicciones_courseraALC2025-11-06.Rmd` : R Markdown con todo el análisis paso a paso.
 - `Predicciones_courseraALC2025-11-06.pdf` : Informe final en PDF generado desde el R Markdown.
 - `curva_ROC.png` : Gráfico de la curva ROC para evaluar la capacidad predictiva del modelo.
-
+- `Predicciones_courseraALC2025-11-06.Rmd`: R Markdown con el análisis completo, incluyendo código, resultados y explicaciones.
 ---
 
 ## Librerías utilizadas
